@@ -1,81 +1,46 @@
-# plugin.sh - DevStack plugin.sh dispatch script for gluon
+# plugin.sh - DevStack plugin.sh dispatch script for proton
 
-gluon_debug() {
-    if [ ! -z "$GLUON_DEVSTACK_DEBUG" ] ; then
+proton_debug() {
+    if [ ! -z "$PROTON_DEVSTACK_DEBUG" ] ; then
 	"$@" || true # a debug command failing is not a failure
     fi
 }
 
-# For debugging purposes, highlight gluon sections
-gluon_debug tput setab 1
+# For debugging purposes, highlight proton sections
+proton_debug tput setab 1
 
-name=gluon
+name=proton
 
 # The server
 
-GITREPO['gluon']=${GLUON_REPO:-https://github.com/GluonsAndProtons/gluon.git}
-GITBRANCH['gluon']=${GLUON_BRANCH:-demo}
-GITDIR['gluon']=$DEST/gluon
-
-# The client API libraries
-GITREPO['gluonlib']=${GLUONLIB_REPO:-https://github.com/GluonsAndProtons/gluonlib.git}
-GITBRANCH['gluonlib']=${GLUONLIB_BRANCH:-master}
-GITDIR['gluonlib']=$DEST/gluonlib
-
-# The Nova client plugin
-GITREPO['gluon-nova']=${GLUON_NOVA_REPO:-https://github.com/iawells/gluon-nova.git}
-GITBRANCH['gluon-nova']=${GLUON_NOVA_BRANCH:-master}
-GITDIR['gluon-nova']=$DEST/gluon-nova
+GITREPO['proton']=${PROTON_REPO:-https://github.com/GluonsAndProtons/proton.git}
+GITBRANCH['proton']=${PROTON_BRANCH:-master}
+GITDIR['proton']=$DEST/proton
 
 function pre_install_me {
     :
 }
 
-gluon_libs_executed=''
-function install_gluon_libs {
-    if [ -z "$gluon_libs_executed" ] ; then
-        gluon_libs_executed=1 
-(
-
-	git_clone_by_name gluonlib # $GLUONLIB_REPO ${GITLIB['gluonlib']} $GLUONLIB_BRANCH
-        cd ${GITDIR['gluonlib']}
-	setup_dev_lib 'gluonlib'
-
-	git_clone_by_name 'gluon-nova' #  $GLUON_NOVA_REPO ${GITDIR['gluon-nova']} $GLUON_NOVA_BRANCH
-        cd ${GITDIR['gluon-nova']}
-	setup_dev_lib 'gluon-nova'
-)
-    fi
+proton_libs_executed=''
+function install_proton_libs {
 }
 
 function install_me {
-    git_clone_by_name 'gluon' # $GLUON_REPO ${GITDIR['gluon']} $GLUON_BRANCH
-    setup_develop ${GITDIR['gluon']}
+    git_clone_by_name 'proton' # $PROTON_REPO ${GITDIR['proton']} $PROTON_BRANCH
+    setup_develop ${GITDIR['proton']}
 }
 
 function init_me {
-    run_process $name "env GLUON_SETTINGS='/etc/gluon/gluon.config' '$GLUON_BINARY'"
+    run_process $name "env PROTON_SETTINGS='/etc/proton/proton.config' '$PROTON_BINARY'"
 }
 
 function configure_me {
-    # Nova needs adjusting from what it thinks it's doing
-    iniset $NOVA_CONF DEFAULT network_api_class "gluon_nova.api.API"
 
-# This will want switching to the Openstack way of doing things when
-# we switch frameworks, but the Flask config files look like this:
-    sudo mkdir -p /etc/gluon || true
-    sudo tee /etc/gluon/gluon.config >/dev/null <<EOF
-NEUTRON_USERNAME = '$ADMIN_USERNAME'
-NEUTRON_PASSWORD = '$ADMIN_PASSWORD'
-NEUTRON_TENANTNAME = '$ADMIN_TENANT'
-KEYSTONE_URL = '$KEYSTONE_AUTH_URI'
-EOF
 }
 
 function shut_me_down {
     stop_process $name
 }
-
 
 # check for service enabled
 if is_service_enabled $name; then
@@ -114,4 +79,4 @@ if is_service_enabled $name; then
     fi
 fi
 
-gluon_debug tput setab 9
+proton_debug tput setab 9

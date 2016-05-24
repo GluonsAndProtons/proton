@@ -24,7 +24,7 @@ from oslo_config import cfg
 from gluon.common import service
 from gluon.api import app as api_app
 from gluon.sync_etcd.thread import start_sync_thread
-import gluon.common.config
+import proton.cmd.config
 from gluon.common.particleGenerator.generator import set_package
 
 LOG = logging.getLogger(__name__)
@@ -61,5 +61,5 @@ def main():
     else:
         LOG.info(_LI('serving on http://%(host)s:%(port)s') %
                  dict(host=host, port=port))
-    start_sync_thread()   # Only for proton
+    start_sync_thread(service_name=cfg.CONF.api.service_name, etcd_port=cfg.CONF.api.etcd_port)   # Only for proton
     srv.serve_forever()

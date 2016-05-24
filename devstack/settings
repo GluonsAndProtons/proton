@@ -1,5 +1,4 @@
-enable_service gluon
+enable_service proton
 
-
-GLUON_BIN_DIR=$(get_python_exec_prefix)
-GLUON_BINARY="$GLUON_BIN_DIR/gluon-server"
+PROTON_BIN_DIR=$(get_python_exec_prefix)
+PROTON_BINARY="$PROTON_BIN_DIR/proton-server"
