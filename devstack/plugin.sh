@@ -23,6 +23,7 @@ function pre_install_me {
 
 proton_libs_executed=''
 function install_proton_libs {
+    :
 }
 
 function install_me {
@@ -35,7 +36,7 @@ function init_me {
 }
 
 function configure_me {
-
+    :
 }
 
 function shut_me_down {
