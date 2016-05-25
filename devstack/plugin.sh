@@ -1,5 +1,7 @@
 # plugin.sh - DevStack plugin.sh dispatch script for proton
 
+PROTON_DIR=$(cd $(dirname $BASH_SOURCE)/.. && pwd)
+
 proton_debug() {
     if [ ! -z "$PROTON_DEVSTACK_DEBUG" ] ; then
 	"$@" || true # a debug command failing is not a failure
@@ -21,22 +23,21 @@ function pre_install_me {
     :
 }
 
-proton_libs_executed=''
-function install_proton_libs {
-    :
-}
-
 function install_me {
-    git_clone_by_name 'proton' # $PROTON_REPO ${GITDIR['proton']} $PROTON_BRANCH
-    setup_develop ${GITDIR['proton']}
+    git_clone_by_name 'proton'
+    setup_develop "$PROTON_DIR"
 }
 
 function init_me {
-    run_process $name "env PROTON_SETTINGS='/etc/proton/proton.config' '$PROTON_BINARY'"
+    run_process $name "'$PROTON_BINARY' --config-file '$PROTON_CONFIG_FILE'"
 }
 
 function configure_me {
-    :
+    sudo install -d -o "$STACK_USER" "$PROTON_CONF_DIR"
+
+    # This tells Proton where to reside
+    iniset ${PROTON_CONFIG_FILE} api host "$PROTON_HOST"
+    iniset ${PROTON_CONFIG_FILE} api port "$PROTON_PORT"
 }
 
 function shut_me_down {
