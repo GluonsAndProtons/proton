@@ -61,5 +61,7 @@ def main():
     else:
         LOG.info(_LI('serving on http://%(host)s:%(port)s') %
                  dict(host=host, port=port))
-    start_sync_thread(service_name=cfg.CONF.api.service_name, etcd_port=cfg.CONF.api.etcd_port)   # Only for proton
+    start_sync_thread(service_name=cfg.CONF.api.service_name,
+		      etcd_host=cfg.CONF.etcd_host,
+	              etcd_port=cfg.CONF.api.etcd_port)   # Only for proton
     srv.serve_forever()
