@@ -85,6 +85,6 @@ ChangeLog
 .*sw?
 /.settings
 
-gluon/gluon.sqlite
-gluon/clean.sqlite
+proton/proton.sqlite
+proton/clean.sqlite
 /*.patch
