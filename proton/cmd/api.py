@@ -25,6 +25,8 @@ from gluon.common import service
 from gluon.api import app as api_app
 from gluon.sync_etcd.thread import start_sync_thread
 import proton.cmd.config
+from proton.cmd.register import register_with_gluon
+
 from gluon.common.particleGenerator.generator import set_package
 
 LOG = logging.getLogger(__name__)
@@ -61,7 +63,13 @@ def main():
     else:
         LOG.info(_LI('serving on http://%(host)s:%(port)s') %
                  dict(host=host, port=port))
+    register_with_gluon(service_name=cfg.CONF.api.service_name,
+                        service_type=cfg.CONF.api.service_type,
+                        host=cfg.CONF.api.host,
+                        port=cfg.CONF.api.port,
+                        gluon_host=cfg.CONF.api.gluon_host,
+                        gluon_port=cfg.CONF.api.gluon_port)
     start_sync_thread(service_name=cfg.CONF.api.service_name,
-		      etcd_host=cfg.CONF.etcd_host,
-	              etcd_port=cfg.CONF.api.etcd_port)   # Only for proton
+                      etcd_host=cfg.CONF.api.etcd_host,
+                      etcd_port=cfg.CONF.api.etcd_port)
     srv.serve_forever()

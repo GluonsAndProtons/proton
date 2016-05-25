@@ -16,3 +16,4 @@ WSME>=0.6,<0.7
 pecan>=0.8.0
 pytz
 etcd
+requests>=2.10.0

@@ -33,6 +33,12 @@ API_SERVICE_OPTS = [
     cfg.IntOpt('etcd_port',
                default=2379,
                help='etcd port'),
+    cfg.StrOpt('gluon_host',
+               default='127.0.0.1',
+               help='etcd host'),
+    cfg.IntOpt('gluon_port',
+               default=2704,
+               help='etcd port'),
 ]
 
 CONF = cfg.CONF
