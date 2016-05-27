@@ -14,6 +14,8 @@
 from gluon.common import exception
 from oslo_log import log as logging
 from gluon.core.manager import ApiManager
+from proton.cmd.register import RegData
+
 
 from gluon.backends import base as BackendBase
 # This has to be dne to get the Database Models
@@ -31,6 +33,19 @@ class ProtonManager(ApiManager):
         super(ProtonManager, self).__init__()
 
     def create_vpnports(self, port):
+        #
+        # Validate that the BasePort and VPN objects exists
+        #
+        baseport_id = port.id
+        vpn_id = port.vpn_instance
+        baseport_class = self.get_gluon_object('ProtonBasePort')
+        baseport = baseport_class.get_by_id(baseport_id)
+        if not baseport:
+            raise exception.NotFound(cls="ProtonBasePort", key=baseport_id)
+        vpn_class = self.get_gluon_object('VpnInstance')
+        vpn = vpn_class.get_by_id(vpn_id)
+        if not vpn:
+            raise exception.NotFound(cls="VpnInstance", key=vpn_id)
         port.create()
         return port
 
@@ -42,12 +57,22 @@ class ProtonManager(ApiManager):
 
     def create_baseports(self, port):
         port.create()
+        #
+        # Register port in gluon
+        #
+        msg = {"port_id": port.id, "operation": "register"}
+        RegData.reg_queue.put(msg)
         return port
 
     def update_baseports(self, obj_class, key, new_values):
         return obj_class.update(key, new_values)
 
     def delete_baseports(self, obj_class, key):
+        #
+        # Remove port from gluon
+        #
+        msg = {"port_id": key, "operation": "deregister"}
+        RegData.reg_queue.put(msg)
         return obj_class.delete(key)
 
     def create_vpns(self, vpn):
