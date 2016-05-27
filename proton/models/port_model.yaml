@@ -7,28 +7,32 @@ ProtonBasePort:
     attributes:
         id:
             type: uuid
-            required: True
             primary: 'True'
+            description: "UUID of base port instance"
         mac_address:
             type: 'string'
             length: 17
             required: True
+            description: "MAC address for port"
             validate: mac_address
         admin_state_up:
             type: 'enum'
             required: True
+            description: "Admin state of port"
             values:
                 - 'UP'
                 - 'DOWN'
         status:
             type: 'enum'
             required: True
+            description: "Operational status of port"
             values:
                 - 'ACTIVE'
                 - 'DOWN'
         vnic_type:
             type: enum
             required: true
+            description: "VNIC type"
             values:
                - 'virtual'
                - 'direct'
@@ -37,35 +41,45 @@ ProtonBasePort:
                - 'whole-dev'
         vm_id:
             type: 'uuid'
+            description: "UUID of bound VM"
         host_id:
             type: 'string'
             length: 32
+            description: "UUID of bound host"
         vif_details:
             type: 'string' # what are we going to use, JSON?
             length: 32
+            description: "JSON string for VIF details"
         vif_type:
             type: 'string'
             length: 32
+            description: "Headline binding type for VIF"
         ipaddress:
             type: 'string'
             length: 64
+            description: "IP Address of port"
             validate: 'ipv4address'
         subnet_prefix:
             type: 'integer'
+            description: "Subnet mask"
             values:
                 - '1-31'
         gateway:
             type: 'string'
             length: 64
+            description: "Default gateway"
             validate: 'ipv4address'
         mtu:
             type: 'integer'
+            description: "MTU"
             required: True
         vlan_transparency:
             type: 'boolean'
+            description: "Allow VLAN tagged traffic on port"
             required: True
         tenant_id:
             type: 'uuid'
+            description: "UUID of tenant owning this port"
 
 # TODO this would be inheritance in a more sane arrangement.
 VPNPort:
@@ -78,6 +92,8 @@ VPNPort:
             type: 'ProtonBasePort'
             required: True
             primary: True
+            description: "Pointer to base port instance (UUID)"
         vpn_instance:
             type: 'VpnInstance'
             required: True
+            description: "Pointer to VPN instance (UUID)"

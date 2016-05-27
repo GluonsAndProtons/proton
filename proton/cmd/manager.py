@@ -30,7 +30,7 @@ class ProtonManager(ApiManager):
         self.gluon_objects = {}
         super(ProtonManager, self).__init__()
 
-    def create_vpnports(self, obj_class, port):
+    def create_vpnports(self, port):
         port.create()
         return port
 
@@ -40,7 +40,7 @@ class ProtonManager(ApiManager):
     def delete_vpnports(self, obj_class, key):
         return obj_class.delete(key)
 
-    def create_baseports(self, obj_class, port):
+    def create_baseports(self, port):
         port.create()
         return port
 
@@ -50,7 +50,7 @@ class ProtonManager(ApiManager):
     def delete_baseports(self, obj_class, key):
         return obj_class.delete(key)
 
-    def create_vpns(self, obj_class, vpn):
+    def create_vpns(self, vpn):
         vpn.create()
         return vpn
 
@@ -60,7 +60,7 @@ class ProtonManager(ApiManager):
     def delete_vpns(self, obj_class, key):
         return obj_class.delete(key)
 
-    def create_vpnafconfigs(self, obj_class, vpnafconfig):
+    def create_vpnafconfigs(self, vpnafconfig):
         vpnafconfig.create()
         return vpnafconfig
 
