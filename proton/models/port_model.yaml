@@ -9,6 +9,16 @@ ProtonBasePort:
             type: uuid
             primary: 'True'
             description: "UUID of base port instance"
+        tenant_id:
+            type: 'uuid'
+            description: "UUID of tenant owning this port"
+        name:
+            type: 'string'
+            length: 64
+            description: "Descriptive name for port"
+        network_id:
+            type: 'uuid'
+            description: "UUID of network - not used for Proton"
         mac_address:
             type: 'string'
             length: 17
@@ -16,12 +26,16 @@ ProtonBasePort:
             description: "MAC address for port"
             validate: mac_address
         admin_state_up:
-            type: 'enum'
+            type: 'boolean'
             required: True
             description: "Admin state of port"
-            values:
-                - 'UP'
-                - 'DOWN'
+        device_owner:
+            type: 'string'
+            length: 128
+            description: "Name of compute or network service (if bound)"
+        device_id:
+            type: 'uuid'
+            description: "UUID of bound VM"
         status:
             type: 'enum'
             required: True
@@ -32,28 +46,34 @@ ProtonBasePort:
         vnic_type:
             type: enum
             required: true
-            description: "VNIC type"
+            description: "binding:vnic_type: Port should be attache to this VNIC type"
             values:
+               - 'normal'
                - 'virtual'
                - 'direct'
                - 'macvtap'
                - 'sriov'
                - 'whole-dev'
-        vm_id:
-            type: 'uuid'
-            description: "UUID of bound VM"
         host_id:
             type: 'string'
             length: 32
-            description: "UUID of bound host"
+            description: "binding:host_id: Name of bound host"
         vif_details:
             type: 'string' # what are we going to use, JSON?
-            length: 32
-            description: "JSON string for VIF details"
+            length: 128
+            description: "binding:vif_details: JSON string for VIF details"
+        profile:
+            type: 'string' # what are we going to use, JSON?
+            length: 128
+            description: "binding:profile: JSON string for binding profile dictionary"
         vif_type:
             type: 'string'
             length: 32
-            description: "Headline binding type for VIF"
+            description: "binding:vif_type: Headline binding type for VIF"
+        zone:
+            type: 'string'
+            length: 64
+            description: "zone information"
         ipaddress:
             type: 'string'
             length: 64
@@ -77,9 +97,6 @@ ProtonBasePort:
             type: 'boolean'
             description: "Allow VLAN tagged traffic on port"
             required: True
-        tenant_id:
-            type: 'uuid'
-            description: "UUID of tenant owning this port"
 
 # TODO this would be inheritance in a more sane arrangement.
 VPNPort:

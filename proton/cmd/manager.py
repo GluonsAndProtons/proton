@@ -32,7 +32,13 @@ class ProtonManager(ApiManager):
         self.gluon_objects = {}
         super(ProtonManager, self).__init__()
 
-    def create_vpnports(self, port):
+    def get_all_vpnports(self, api_class, obj_class):
+        return obj_class.as_list(obj_class.list())
+
+    def get_one_vpnports(self, api_class, obj_class, key):
+        return obj_class.get_by_primary_key(key).as_dict()
+
+    def create_vpnports(self, api_class, port):
         #
         # Validate that the BasePort and VPN objects exists
         #
@@ -47,27 +53,33 @@ class ProtonManager(ApiManager):
         if not vpn:
             raise exception.NotFound(cls="VpnInstance", key=vpn_id)
         port.create()
-        return port
+        return api_class.build(port)
 
-    def update_vpnports(self, obj_class, key, new_values):
-        return obj_class.update(key, new_values)
+    def update_vpnports(self, api_class, obj_class, key, new_values):
+        return api_class.build(obj_class.update(key, new_values))
 
-    def delete_vpnports(self, obj_class, key):
+    def delete_vpnports(self, api_class, obj_class, key):
         return obj_class.delete(key)
 
-    def create_baseports(self, port):
+    def get_all_baseports(self, api_class, obj_class):
+        return obj_class.as_list(obj_class.list())
+
+    def get_one_baseports(self, api_class, obj_class, key):
+        return obj_class.get_by_primary_key(key).as_dict()
+
+    def create_baseports(self, api_class, port):
         port.create()
         #
         # Register port in gluon
         #
         msg = {"port_id": port.id, "operation": "register"}
         RegData.reg_queue.put(msg)
-        return port
+        return api_class.build(port)
 
-    def update_baseports(self, obj_class, key, new_values):
-        return obj_class.update(key, new_values)
+    def update_baseports(self, api_class, obj_class, key, new_values):
+        return api_class.build(obj_class.update(key, new_values))
 
-    def delete_baseports(self, obj_class, key):
+    def delete_baseports(self, api_class, obj_class, key):
         #
         # Remove port from gluon
         #
@@ -75,24 +87,36 @@ class ProtonManager(ApiManager):
         RegData.reg_queue.put(msg)
         return obj_class.delete(key)
 
-    def create_vpns(self, vpn):
+    def get_all_vpns(self, api_class, obj_class):
+        return obj_class.as_list(obj_class.list())
+
+    def get_one_vpns(self, api_class, obj_class, key):
+        return obj_class.get_by_primary_key(key).as_dict()
+
+    def create_vpns(self, api_class, vpn):
         vpn.create()
-        return vpn
+        return api_class.build(vpn)
 
-    def update_vpns(self, obj_class, key, new_values):
-        return obj_class.update(key, new_values)
+    def update_vpns(self, api_class, obj_class, key, new_values):
+        return api_class.build(obj_class.update(key, new_values))
 
-    def delete_vpns(self, obj_class, key):
+    def delete_vpns(self, api_class, obj_class, key):
         return obj_class.delete(key)
 
-    def create_vpnafconfigs(self, vpnafconfig):
+    def get_all_vpnafconfigs(self, api_class, obj_class):
+        return obj_class.as_list(obj_class.list())
+
+    def get_one_vpnafconfigs(self, api_class, obj_class, key):
+        return obj_class.get_by_primary_key(key).as_dict()
+
+    def create_vpnafconfigs(self, api_class, vpnafconfig):
         vpnafconfig.create()
-        return vpnafconfig
+        return api_class.build(vpnafconfig)
 
-    def update_vpnafconfigs(self, obj_class, key, new_values):
-        return obj_class.update(key, new_values)
+    def update_vpnafconfigs(self, api_class, obj_class, key, new_values):
+        return api_class.build(obj_class.update(key, new_values))
 
-    def delete_vpnafconfigs(self, obj_class, key):
+    def delete_vpnafconfigs(self, api_class, obj_class, key):
         return obj_class.delete(key)
 
 
