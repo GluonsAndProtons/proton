@@ -15,6 +15,7 @@ from gluon.common import exception
 from oslo_log import log as logging
 from gluon.core.manager import ApiManager
 from proton.cmd.register import RegData
+import webob.exc as exc
 
 
 from gluon.backends import base as BackendBase
@@ -36,7 +37,11 @@ class ProtonManager(ApiManager):
         return obj_class.as_list(obj_class.list())
 
     def get_one_vpnports(self, api_class, obj_class, key):
-        return obj_class.get_by_primary_key(key).as_dict()
+        try:
+            obj = obj_class.get_by_primary_key(key)
+        except Exception as e:
+            raise exc.HTTPNotFound()
+        return obj.as_dict()
 
     def create_vpnports(self, api_class, port):
         #
@@ -65,7 +70,11 @@ class ProtonManager(ApiManager):
         return obj_class.as_list(obj_class.list())
 
     def get_one_baseports(self, api_class, obj_class, key):
-        return obj_class.get_by_primary_key(key).as_dict()
+        try:
+            obj = obj_class.get_by_primary_key(key)
+        except Exception as e:
+            raise exc.HTTPNotFound()
+        return obj.as_dict()
 
     def create_baseports(self, api_class, port):
         port.create()
@@ -91,7 +100,11 @@ class ProtonManager(ApiManager):
         return obj_class.as_list(obj_class.list())
 
     def get_one_vpns(self, api_class, obj_class, key):
-        return obj_class.get_by_primary_key(key).as_dict()
+        try:
+            obj = obj_class.get_by_primary_key(key)
+        except Exception as e:
+            raise exc.HTTPNotFound()
+        return obj.as_dict()
 
     def create_vpns(self, api_class, vpn):
         vpn.create()
@@ -107,7 +120,12 @@ class ProtonManager(ApiManager):
         return obj_class.as_list(obj_class.list())
 
     def get_one_vpnafconfigs(self, api_class, obj_class, key):
-        return obj_class.get_by_primary_key(key).as_dict()
+        try:
+            obj = obj_class.get_by_primary_key(key)
+        except Exception as e:
+            raise exc.HTTPNotFound()
+        return obj.as_dict()
+
 
     def create_vpnafconfigs(self, api_class, vpnafconfig):
         vpnafconfig.create()

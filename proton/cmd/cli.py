@@ -1,6 +1,9 @@
 import click
 import types
-from gluon.common.particleGenerator.cli import procModel
+from gluon.common.particleGenerator.cli import proc_model
+import sys
+
+sys.tracebacklimit=0
 
 def dummy():
     pass
@@ -8,7 +11,7 @@ def dummy():
 def main():
     cli = types.FunctionType(dummy.func_code, {})
     cli = click.group()(cli)
-    procModel(cli,
+    proc_model(cli,
               package_name = "proton",
               hostenv = "OS_PROTON_HOST",
               portenv = "OS_PROTON_PORT",
